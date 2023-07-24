@@ -4,8 +4,6 @@
 int main(){
     int fd[2];
     int fd1[2];
-    char arr[50];
-    int len;
     char first,last,temp;
     
     if(pipe(fd)==-1 || pipe(fd1)==-1)
@@ -17,32 +15,32 @@ int main(){
     if(pid==0){
         close(fd[0]);
         close(fd1[0]);
+        char arr1[50];
+        int len1;
         printf("\nChild process");
         printf("\nEnter a string: ");
-        fgets(arr,sizeof(arr),stdin);
-        len=strlen(arr);
-        write(fd1[1],&len,sizeof(int));
-        write(fd[1], arr,sizeof(char)*len);
+        fgets(arr1,sizeof(arr1),stdin);
+        len1=strlen(arr1);
+        write(fd1[1],&len1,sizeof(int));
+        write(fd[1], arr1,sizeof(char)*len1);
     }
     else{
         close(fd[1]);
         close(fd1[1]);
-      
+        char arr2[50];
+        int len2;
         printf("\nParent process");
-        read(fd1[0],&len,sizeof(int));
-        read(fd[0],arr,sizeof(char)*len);
-        for(int i=0,j=len-1;i<j;i++,j--){
-            temp=arr[i];
-            arr[i]=arr[j];
-            arr[j]=temp;
+        read(fd1[0],&len2,sizeof(int));
+        read(fd[0],arr2,sizeof(char)*len2);
+        for(int i=0,j=len2-1;i<j;i++,j--){
+            temp=arr2[i];
+            arr2[i]=arr2[j];
+            arr2[j]=temp;
         }
-        
-        for(int i=0; i<len; i++){
-            printf("%c", arr[i]);
+        for(int i=0; i<len2; i++){
+            printf("%c", arr2[i]);
         }
-        
     }
-    
 }
 
 
